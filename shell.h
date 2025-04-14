@@ -32,6 +32,10 @@ int dupandclose(int fd, int fdold, int numargs, char *args[]);
 
 int redirects(int numargs, char *args[]);
 
+int executar_com_pipe(char **args);
+
+int containsPipe (int numArgs, char **arg);
+
 /* constantes que podem tornar uteis*/
 
 #define BG 0

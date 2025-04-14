@@ -7,10 +7,10 @@
 #
 # Variaveis: compiler, compiler flags, libraries to link, names of the object files for the executable.
 #
-CC=cc
+CC=gcc
 FLAGS=-c -Wall
 LIBS=-lm
-OBS=main.o execute.o parse.o socp.o calc.o jpeg.o redirect.o
+OBS=main.o execute.o parse.o socp.o calc.o jpeg.o redirect.o pipe.o
 
 #Alvo por defeito é o primeiro
 all :  soshell
@@ -29,6 +29,8 @@ jpeg.o : shell.h jpeg.c
 	$(CC) $(FLAGS) jpeg.c 
 redirect.o : shell.h redirect.c
 	$(CC) $(FLAGS) redirect.c 
+pipe.o : shell.h pipe.c
+	$(CC) $(FLAGS) pipe.c 
 soshell : $(OBS)
 	$(CC)  -o soshell  $(OBS) $(LIBS)
 clean limpar:

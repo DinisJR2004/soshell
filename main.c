@@ -46,6 +46,14 @@ int builtin(char **args)
   int saved_stdout = dup(STDOUT_FILENO);
   int saved_stderr = dup(STDERR_FILENO);
 
+
+  /////////////////////////////
+  int pipe_index = containsPipe(numargs, args);
+  if (pipe_index != -1) {
+    return executar_com_pipe(args);  // Chama a função para lidar com o pipe
+  }
+  /////////////////////////////////
+
   // Tratar redirecionamentos
   numargs = redirects(numargs, args);
 
