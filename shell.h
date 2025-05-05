@@ -12,6 +12,22 @@
 #include <errno.h> 
 #include <math.h>
 
+#define MAX_LOG_ENTRIES 100
+#define LOG_ENTRY_SIZE 130
+
+extern char copy_log[MAX_LOG_ENTRIES][LOG_ENTRY_SIZE];
+extern int log_index;
+
+typedef struct {
+    char msg[256];
+    int tempo;
+} aviso_t;
+
+typedef struct {
+    char fonte[256];      
+    char destino[256];          
+} copiar_t;
+
 void parse(char *buf, char **args);
 
 void execute(char **args);
@@ -36,7 +52,20 @@ int executar_com_pipe(char **args);
 
 int containsPipe (int numArgs, char **arg);
 
-/* constantes que podem tornar uteis*/
+void aviso (char *mesg, int tempo);
 
+void * avisowrapperMAU(void *args);
+
+void * avisowrapper(void *args);
+
+void socpthread(char *fonte, char *destino);
+
+void *socp_wrapper(void *args);
+
+void log_copy_result(const char *filename, int success);
+
+void InfoCopias();
+
+/* constantes que podem tornar uteis*/
 #define BG 0
 #define FG 1

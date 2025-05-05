@@ -50,7 +50,7 @@ int builtin(char **args)
   /////////////////////////////
   int pipe_index = containsPipe(numargs, args);
   if (pipe_index != -1) {
-    return executar_com_pipe(args);  // Chama a função para lidar com o pipe
+    return executar_com_pipe(args); 
   }
   /////////////////////////////////
 
@@ -80,6 +80,33 @@ int builtin(char **args)
   if (strcmp(args[0], "obterinfo") == 0)
   {
     printf("SO Shell 2025 versão 1.0\n");
+    goto fim;
+  }
+
+  if (strcmp(args[0], "avisoTeste") == 0)
+  {
+    aviso(args[1], atoi(args[2]));
+    goto fim;
+  }
+
+  if (strcmp(args[0], "avisoMAU") == 0)
+  {
+    pthread_t th;
+    pthread_create(&th, NULL, avisowrapper, (void *)args);
+    goto fim;
+  }
+
+  if (strcmp(args[0], "aviso") == 0)
+  {
+    pthread_t th;
+    aviso_t *ptr = (aviso_t *)malloc(sizeof(aviso_t));
+    if (ptr == NULL) {
+        perror("malloc");
+        goto fim;
+    }
+    strcpy(ptr->msg, args[1]);
+    ptr->tempo = atoi(args[2]);
+    pthread_create(&th, NULL, avisowrapper, (void *)ptr);
     goto fim;
   }
 
@@ -178,6 +205,30 @@ int builtin(char **args)
 
     close(fd);
     goto fim;
+  }
+
+  //////////////////////////////////////////
+  // soshell> socpthread bigfile copia1
+  // soshell> socpthread db2.pecas copia2
+  // soshell> lnfoCopias
+  //  Sun May 12 21:16:24 2024 bigfile
+  //  Sun May 12 21:16:27 2024 db2.pecas
+
+  if (strcmp(args[0], "socpthread") == 0) {
+    if (args[1] == NULL || args[2] == NULL) {
+        fprintf(stderr, "Uso: socpthread <fonte> <destino>\n");
+        goto fim;
+    }
+    
+    socpthread(args[1], args[2]);
+    goto fim;
+  }
+
+  if(strcmp(args[0], "InfoCopias") == 0) {
+
+    InfoCopias();
+    goto fim;
+
   }
 
   // Comando não é embutido

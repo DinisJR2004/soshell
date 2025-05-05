@@ -1,5 +1,8 @@
 #include "shell.h"
 
+// Está funcional, mas tenho que refazer no execute.c 
+//
+
 /* Detetar o simbolo do PIPE dentro do array of Strings. Devolve a indice ou -1 se não existe */
 int containsPipe (int numArgs, char **args) {
     for (int index = 0; index < numArgs; index++){
@@ -11,29 +14,29 @@ int containsPipe (int numArgs, char **args) {
 }
 
 int executar_com_pipe(char **args) {
-    // Dividir os argumentos em comandos separados por pipe
-    char *comandos[10][64];  // até 10 comandos com até 64 argumentos
+
+    char *comandos[10][64]; 
     int cmd_index = 0, arg_index = 0, inner_index = 0;
 
     // Dividir os comandos baseados no pipe
     while (args[arg_index] != NULL) {
         if (strcmp(args[arg_index], "|") == 0) {
-            comandos[cmd_index][inner_index] = NULL;  // Finaliza o comando anterior
-            cmd_index++;  // Passa para o próximo comando
+            comandos[cmd_index][inner_index] = NULL;  
+            cmd_index++;  
             inner_index = 0;
         } else {
-            comandos[cmd_index][inner_index++] = args[arg_index];  // Adiciona argumento ao comando
+            comandos[cmd_index][inner_index++] = args[arg_index]; 
         }
         arg_index++;
     }
-    comandos[cmd_index][inner_index] = NULL;  // Finaliza o último comando
+    comandos[cmd_index][inner_index] = NULL;  
 
-    int cmd_count = cmd_index + 1;  // Número total de comandos
+    int cmd_count = cmd_index + 1;  
     pid_t pid;
     int pipefd[2], prev_fd = -1;
 
     for (int i = 0; i < cmd_count; i++) {
-        pipe(pipefd);  // Cria o pipe
+        pipe(pipefd);  
 
         if ((pid = fork()) == 0) {
             // Se não é o primeiro comando, redireciona stdin
@@ -44,7 +47,7 @@ int executar_com_pipe(char **args) {
 
             // Se não é o último comando, redireciona stdout
             if (i < cmd_count - 1) {
-                dup2(pipefd[1], STDOUT_FILENO);  // Redireciona stdout para o próximo pipe
+                dup2(pipefd[1], STDOUT_FILENO);  // Redireciona o stdout para o próximo pipe
             }
 
             close(pipefd[0]);
@@ -59,11 +62,11 @@ int executar_com_pipe(char **args) {
             wait(NULL);  // Espera o processo filho terminar
             close(pipefd[1]);
             if (prev_fd != -1) {
-                close(prev_fd);  // Fecha o pipe anterior
+                close(prev_fd);
             }
-            prev_fd = pipefd[0];  // Atualiza o pipe anterior
+            prev_fd = pipefd[0]; 
         }
     }
 
-    return 1;  // Foi tratado como pipe
+    return 1; 
 }

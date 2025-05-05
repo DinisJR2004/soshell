@@ -2,49 +2,38 @@
 
 #define BUFFSIZE 128  // Tamanho do buffer para leitura/escrita
 
-void ioCopy(int IN, int OUT) // Função de cópia
-{
+void ioCopy(int IN, int OUT) {
     int n;
-    char buf[BUFFSIZE];
-    while ((n = read(IN, buf, BUFFSIZE)) > 0)
-    {
-        if (write(OUT, buf, n) != n)
-        {
-            perror("Erro de escrita");
-            close(IN);
-            close(OUT);
-            exit(1);
+    char buf[1024];
+    
+    while ((n = read(IN, buf, sizeof(buf))) > 0) {
+        if (write(OUT, buf, n) != n) {
+            perror("Erro na escrita");
+            return; // Sai da função mas não retorna valor
         }
     }
-    if (n < 0)
-        perror("Erro de leitura");
+    
+    if (n < 0) {
+        perror("Erro na leitura");
+    }
 }
 
-void socp(char *fonte, char *destino)
-{
-    int fd_origem, fd_destino;
-
-    // Abrir arquivo de origem para leitura
-    fd_origem = open(fonte, O_RDONLY);
-    if (fd_origem < 0)
-    {
+void socp(char *fonte, char *destino) {
+    int fd_origem = open(fonte, O_RDONLY);
+    if (fd_origem < 0) {
         perror("Erro ao abrir arquivo de origem");
         return;
     }
 
-    // Criar/abrir arquivo de destino para escrita (permissões: rw-r--r--)
-    fd_destino = open(destino, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-    if (fd_destino < 0)
-    {
+    int fd_destino = open(destino, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+    if (fd_destino < 0) {
         perror("Erro ao criar/abrir arquivo de destino");
         close(fd_origem);
         return;
     }
 
-    // Copia os dados de fd_origem para fd_destino
     ioCopy(fd_origem, fd_destino);
-
-    // Fecha os arquivos
+    
     close(fd_origem);
     close(fd_destino);
 }
