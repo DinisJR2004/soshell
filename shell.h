@@ -11,6 +11,11 @@
 #include <sys/wait.h>
 #include <errno.h> 
 #include <math.h>
+#include <dirent.h> 
+#include <pwd.h>
+#include <sys/utsname.h>
+#include <sys/sysinfo.h>
+#include <limits.h>
 
 #define MAX_LOG_ENTRIES 100
 #define LOG_ENTRY_SIZE 130
@@ -65,6 +70,16 @@ void *socp_wrapper(void *args);
 void log_copy_result(const char *filename, int success);
 
 void InfoCopias();
+
+void maior(const char *ficheiro1, const char *ficheiro2);
+
+void setx(const char *ficheiro);
+
+void removerl(const char *ficheiro);
+
+void listar(char *pasta);
+
+void neofetch();
 
 /* constantes que podem tornar uteis*/
 #define BG 0

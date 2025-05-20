@@ -9,6 +9,14 @@ int main()
   char linha[1024]; /* um comando */
   char *args[64];   /* com um maximo de 64 argumentos */
 
+  printf("  ______  _    _   _____   _      _     \n");
+  printf(" / ____/ | |  | | |  ___| | |    | |     \n");
+  printf("| (___   | |__| | | |__   | |    | |     \n");
+  printf("   ___   |  __  | |  __|  | |    | |       \n");
+  printf("  ___) | | |  | | | |___  | |__  | |__     \n");
+  printf("/_____/  |_|  |_| |_____| |____| |____|     \n");
+  printf("                                        2025     \n");
+
   strcpy(prompt, "SOSHELL:");
   while (1)
   {
@@ -227,6 +235,61 @@ int builtin(char **args)
   if(strcmp(args[0], "InfoCopias") == 0) {
 
     InfoCopias();
+    goto fim;
+
+  }
+
+  if(strcmp(args[0], "maior") == 0) {
+
+    if(args[1] == NULL && args[2] == NULL) {
+      fprintf(stderr, "Uso: maior <arg1> <arg2> \n");
+      goto fim;
+    }
+
+    maior(args[1], args[2]);
+    goto fim;
+
+  }  
+
+  if(strcmp(args[0], "setx") == 0) { 
+
+    if(args[1] == NULL) {
+      fprintf(stderr, "Uso: setx <arg1> \n");
+      goto fim;
+    }
+
+    setx(args[1]);
+    goto fim;
+
+  }
+
+  if(strcmp(args[0], "removerl") == 0) { 
+
+    if(args[1] == NULL) {
+      fprintf(stderr, "Uso: removerl <arg1> \n");
+      goto fim;
+    }
+
+    removerl(args[1]);
+    goto fim;
+
+  }
+
+  if(strcmp(args[0], "sols") == 0) { 
+
+    if(args[1] == NULL) {
+      fprintf(stderr, "Uso: sols <pasta> \n");
+      goto fim;
+    }
+
+    listar(args[1]);
+    goto fim;
+
+  }
+
+  if(strcmp(args[0], "neofetch") == 0) { 
+
+    neofetch();
     goto fim;
 
   }

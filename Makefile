@@ -10,7 +10,7 @@
 CC=gcc
 FLAGS=-c -Wall
 LIBS=-lm
-OBS=main.o execute.o parse.o socp.o calc.o jpeg.o redirect.o pipe.o threads.o
+OBS=main.o execute.o parse.o socp.o calc.o jpeg.o redirect.o pipe.o threads.o fileutils.o neofetch.o
 
 #Alvo por defeito é o primeiro
 all :  soshell
@@ -33,6 +33,10 @@ pipe.o : shell.h pipe.c
 	$(CC) $(FLAGS) pipe.c 
 threads.o : shell.h threads.c
 	$(CC) $(FLAGS) threads.c 
+fileutils.o : shell.h fileutils.c
+	$(CC) $(FLAGS) fileutils.c
+neofetch.o : shell.h neofetch.c
+	$(CC) $(FLAGS) neofetch.c
 soshell : $(OBS)
 	$(CC)  -o soshell  $(OBS) $(LIBS)
 clean limpar:
