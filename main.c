@@ -1,3 +1,5 @@
+/* https://github.com/DinisJR2004/soshell */
+
 #include "shell.h"
 
 char prompt[100];
